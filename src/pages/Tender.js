@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import NewTender from "./NewTender";
-function Tender({bid_id, tenders}) {
+function Tender({bid_id}) {
     const [tenderlist, setTenders] = useState([]);
     
     useEffect(loadTenders,[]);
