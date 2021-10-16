@@ -1,10 +1,10 @@
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { Box } from "../styles";
+import { Box , Button } from "../styles";
 function BidItem({user, bid, onUpdateBid, onDeleteBid, onJoinBid}) {
     
     function handleDeleteBid() {
-        if (user.id == bid.user.user_id) {
+        if (user.id === bid.user_id) {
             fetch(`/bids/${bid.id}`, {
                 method: "DELETE",
               }).then((r) => {
@@ -15,7 +15,7 @@ function BidItem({user, bid, onUpdateBid, onDeleteBid, onJoinBid}) {
         }
     }    
     function handleUpdateBid() {
-        if (user.id == bid.user_id) {
+        if (user.id === bid.user.user_id) {
             onUpdateBid(bid);
         }
     }
@@ -33,12 +33,19 @@ function BidItem({user, bid, onUpdateBid, onDeleteBid, onJoinBid}) {
                 &nbsp;·&nbsp;
                 <cite>By {bid.user.user_name}</cite>
               </p>
-              <button onClick={handleUpdateBid}>Uodate Bid session</button>
-              &nbsp;·&nbsp;
-              <button onClick={handleDeleteBid}>Delete Bid session</button>
-              &nbsp;·&nbsp;
-              <button onClick={handleJoinBid}>Join Bid session</button>
-              <ReactMarkdown>{bid.description}</ReactMarkdown>
+              <ReactMarkdown>{bid.description}</ReactMarkdown> 
+              <Button variant="outline" color = "primary" onClick={handleUpdateBid}>
+                Uodate Bid session
+              </Button>
+              &nbsp;&nbsp;
+              <Button variant="outline" color = "primary" onClick={handleDeleteBid}>
+                Delete Bid session
+              </Button>
+              &nbsp;&nbsp;
+              <Button variant="outline" color = "primary" onClick={handleJoinBid}>
+                Join Bid session
+              </Button>
+              
             </Box>
         </Item>
     );

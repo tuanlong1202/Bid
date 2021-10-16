@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useHistory } from "react-router";
 import styled from "styled-components";
 import { Button, Error, FormField, Input, Label, Textarea } from "../styles";
 
@@ -10,7 +9,6 @@ function UpdateBid({ bid, updateBids }) {
   const [description, setDescription] = useState(bid.description);
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
 
   function handleSubmit(e) {
     e.preventDefault();

@@ -1,11 +1,19 @@
 import ReactMarkdown from "react-markdown";
-import { useHistory } from "react-router";
 import styled from "styled-components";
-import { Box } from "../styles";
+import { Box, Button } from "../styles";
+import Tender from "./Tender";
 function JoinBid({user, bid, goBack}) {
-    const history = useHistory();
+    console.log(bid)
     function handleBack() {
         goBack();
+    }
+    function handleEndSession() {
+      //load tenders
+      //find the max value
+      //update bid session with last_price and end_session=true => if good goback else console.log err
+
+      // ***** NOTE *******
+      // Bid session , which has end ,  have to frozen: Button Join in Bid's list must gray, and Not allow new tender
     }
 
     return (
@@ -19,10 +27,21 @@ function JoinBid({user, bid, goBack}) {
                 &nbsp;·&nbsp;
                 <cite>By {user.user_name}</cite>
               </p>
-              <button onClick={handleBack}>Back</button>
               <ReactMarkdown>{bid.description}</ReactMarkdown>
+              <Button variant="outline" color = "primary" onClick={handleBack}>
+                Back
+              </Button>
+              &nbsp;&nbsp;
+              <Button variant="outline" color = "primary" onClick={handleEndSession}>
+                End session
+              </Button>
             </Box>
         </Item>
+        <Tender
+          bid_id={bid.id}
+          tenders={bid.tenders}
+        >
+        </Tender>
         </Wrapper>
     );
 }
