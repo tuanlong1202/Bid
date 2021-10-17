@@ -4,9 +4,9 @@ import NewTender from "./NewTender";
 function Tender({bid_id}) {
     const [tenderlist, setTenders] = useState([]);
     
-    useEffect(loadTenders(bid_id),[]);
+    useEffect(loadTenders(),[]);
     
-    function loadTenders(bid_id){
+    function loadTenders(){
         fetch(`/bids/${bid_id}/tenders`)
         .then((r) => r.json())
         .then((data) => {
@@ -17,7 +17,7 @@ function Tender({bid_id}) {
     }
 
     function handleOnAdd() {
-        loadTenders(bid_id);
+        loadTenders();
     }
     
     return (

@@ -18,6 +18,9 @@ function NavBar({ user, setUser }) {
         <Link to="/">Bids</Link>
       </Logo>
       <Nav>
+        <Button as={Link} to="/message">
+          Message
+        </Button>
         <Button as={Link} to="/new">
           New Bid session
         </Button>

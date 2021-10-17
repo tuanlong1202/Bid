@@ -27,6 +27,9 @@ function App() {
           <Route path="/new">
             <NewBid user={user} />
           </Route>
+          <Route path="/message">
+            <Message user={user} />
+          </Route>
           <Route path="/">
             <BidList user={user} />
           </Route>

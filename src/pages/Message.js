@@ -1,43 +1,95 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import InBox from "./InBox";
+import NewMessage from "./NewMessage";
 import OutBox from "./OutBox";
 import ViewMessage from "./ViewMessage";
-function Message() {
-    const [page, setPage] = useState("inbox");
-    const [prevPage, setPrevPage] = useState("");
-    const [viewID, setViewID] = useState("");
+import { Button } from "../styles"
+function Message({user}) {
+    const [subject, setSubject] = useState("");
+    const [receiver, setReceiver] = useState("");
+    const [pages, setPages] = useState([
+        {
+          name: "inbox",
+          recordID: 0
+        }
+      ]);
     function handleOnViewFromInbox(id) {
         //
-        setPrevPage("inbox");
-        setPage("view");
-        setViewID(id);
+        const updatePages = [...pages, {name: "view", recordID:id}];
+        setPages(updatePages);
     }
-    function goBack() {
-        setViewID("");
-        if (prevPage != "") {
-            setPage(prevPage);
-        } else {
-            setPage("inbox");
-        }
+    function goBackFromView() {
+        pages.pop;
+        setPages(pages);
+    }
+
+    function goReply(subject, receiver) {
+        const updatePages = [...pages, {name: "new", recordID:0}];
+        setPages(updatePages);
+        setSubject(subject);
+        setReceiver(receiver);
+    }
+
+    function goBackFromNewMessage(){
+        pages.pop;
+        setPages(pages);
+    }
+
+    function clickInbox(){
+        const updatePages = [{name: "inbox", recordID:0}]
+        setPages(updatePages);
+    }
+
+    function clickOutbox() {
+        const updatePages = [{name: "outbox", recordID:0}]
+        setPages(updatePages);
+    }
+
+    function clickSendMessage() {
+        const updatePages = [...pages, {name: "new", recordID:0}];
+        setPages(updatePages);
+        setSubject("");
+        setReceiver("");
     }
 
     return (
         <Wrapper>
-        {(page == "inbox") ? (
+            <Button variant="fill" color = "primary" onClick={clickInbox}>
+                Inbox
+            </Button>
+            &nbsp;&nbsp;
+            <Button variant="outline" color = "primary" onClick={clickOutbox}>
+                Outbox
+            </Button>
+            &nbsp;&nbsp;
+            <Button variant="outline" color = "primary" onClick={clickSendMessage}>
+                Send message
+            </Button>
+        {(pages[pages.length -1].name == "inbox") ? (
             <InBox onView={handleOnViewFromInbox} />
         ) : (
-            (page == "outbox") ? (
+            (pages[pages.length -1].name == "outbox") ? (
                 <OutBox />
             ) : (
-                (page == "view") ? (
+                (pages[pages.length -1].name == "view") ? (
                     <ViewMessage
-                        id={viewID}
-                        onHandleBack={goBack}
+                        id={pages[pages.length -1].recordID}
+                        onHandleBack={goBackFromView}
+                        onHandleReply={goReply}
                     />
                 ) : (
-                    <>
-                    </>
+                    (pages[pages.length -1].name == "new") ? (
+                        <NewMessage 
+                            user={user}
+                            sub={subject}
+                            receiver={receiver}
+                            goBack={goBackFromNewMessage}
+                        />
+                    ) : (
+                        <>
+                        </>
+                    )
                 )
             )
         )

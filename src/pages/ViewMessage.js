@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { Box, Button } from "../styles";
-function ViewMessage({id, onHandleBack}){
+function ViewMessage({id, onHandleBack, onHandleReply}){
     const [message, setMessage] = useState(null);
-    const [userSender, setUserSender] = useState(null);
+    const [senderUser, setSenderUser] = useState(null);
     useEffect(() => {
         // load message
         fetch(`/messages/${id}`).then((r) => {
@@ -21,7 +21,7 @@ function ViewMessage({id, onHandleBack}){
         fetch(`/user`).then((r) => {
             if (r.ok) {
                 r.json().then((users) => {
-                    setUserSender((users) => {
+                    setSenderUser((users) => {
                         users.select(function(x) { if (x.id == message.sender)  return true})
                     })
                 });
@@ -51,20 +51,24 @@ function ViewMessage({id, onHandleBack}){
         onHandleBack();
     }
 
+    function handleReply() {
+        onHandleReply("Re: " + message.subject, senderUser.user_name);
+    }
+
     return (
             <Item key={message.id}>
                 <Box>
                 <p>
                     <h3>{message.subject}</h3>
                     &nbsp;·&nbsp;
-                    <cite>By {userSender.user_name}</cite>
+                    <cite>By {senderUser.user_name}</cite>
                 </p>
                 <ReactMarkdown>{message.memo}</ReactMarkdown>
                 <Button variant="outline" color = "primary" onClick={handleBack}>
                     Back
                 </Button>
                 &nbsp;&nbsp;
-                <Button variant="outline" color = "primary" onClick={handleEndSession}>
+                <Button variant="outline" color = "primary" onClick={handleReply}>
                     Reply
                 </Button>
                 </Box>
