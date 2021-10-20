@@ -4,6 +4,7 @@ import NavBar from "./NavBar";
 import Login from "../pages/Login";
 import BidList from "../pages/BidList";
 import NewBid from "../pages/NewBid";
+import Message from "../pages/Message";
 
 function App() {
   const [user, setUser] = useState(null);

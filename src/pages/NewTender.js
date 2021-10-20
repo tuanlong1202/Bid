@@ -17,16 +17,14 @@ function NewTender({ bid_id , onAdd}) {
         price,
         description,
       }),
-    })
-    .then(response => response.json())
-    .then((data) => {
-        setDescription("");
+    }).then((r) => {
+      if(r.ok) {
+        r.json().then((tender) => onAdd(tender));
         setPrice("");
-        onAdd();
-    })
-    .catch((error) => {
-        setErrors(error.errors)
-        console.error('Error:', error);
+        setDescription("");
+      } else {
+        r.json().then((err) => setErrors(err.errors));
+      }
     });
   }
 

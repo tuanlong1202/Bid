@@ -15,7 +15,7 @@ function BidItem({user, bid, onUpdateBid, onDeleteBid, onJoinBid}) {
         }
     }    
     function handleUpdateBid() {
-        if (user.id === bid.user.user_id) {
+        if (user.id === bid.user_id) {
             onUpdateBid(bid);
         }
     }
@@ -34,18 +34,25 @@ function BidItem({user, bid, onUpdateBid, onDeleteBid, onJoinBid}) {
                 <cite>By {bid.user.user_name}</cite>
               </p>
               <ReactMarkdown>{bid.description}</ReactMarkdown> 
-              <Button variant="outline" color = "primary" onClick={handleUpdateBid}>
-                Uodate Bid session
-              </Button>
+              {(!bid.end_session) ? (
+                  <Button variant="outline" color = "primary" onClick={handleUpdateBid}>
+                    Uodate Bid session
+                  </Button>
+              ) : (
+                <></>
+              )}
               &nbsp;&nbsp;
               <Button variant="outline" color = "primary" onClick={handleDeleteBid}>
                 Delete Bid session
               </Button>
               &nbsp;&nbsp;
-              <Button variant="outline" color = "primary" onClick={handleJoinBid}>
-                Join Bid session
-              </Button>
-              
+              {(!bid.end_session) ? (
+                  <Button variant="outline" color = "primary" onClick={handleJoinBid}>
+                    Join Bid session
+                  </Button>
+              ) : (
+                <></>
+              )}
             </Box>
         </Item>
     );

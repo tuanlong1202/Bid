@@ -27,11 +27,7 @@ function UpdateBid({ bid, updateBids }) {
     }).then((r) => {
         setIsLoading(false);
         if (r.ok) {
-            bid.subject = subject;
-            bid.image = image;
-            bid.price = price;
-            bid.description = description;
-            updateBids(bid);
+            r.json().then((bid) => updateBids(bid));
         } else {
           r.json().then((err) => setErrors(err.errors));
         }

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import styled from "styled-components";
+import MessageItem from "./MessageItem";
 function InBox({onView}){
     const [inboxList, setInboxList] = useState([]);
     useEffect(() => {
@@ -10,7 +11,7 @@ function InBox({onView}){
           }
         });
       }, []);
-    function onViewClick(id){
+    function handleViewClick(id){
         onView(id);
     }
     return (
@@ -18,9 +19,11 @@ function InBox({onView}){
             {inboxList.length > 0 ? (
               <ol>{
                 inboxList.map((m) => (
-                <li key={m.id}>
-                    <a onClick={onViewClick(m.id)}>{ m.unread ? "<strong>" : ""}{m.subject}{ m.unread ? "</strong>" : ""}</a>
-                </li>
+                  <MessageItem 
+                    key={m.id}
+                    m={m}
+                    viewClick={handleViewClick}
+                  />
                 ))
               }</ol>
             ) : (

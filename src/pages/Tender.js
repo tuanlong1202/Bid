@@ -1,30 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState,useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import NewTender from "./NewTender";
-function Tender({bid_id}) {
-    const [tenderlist, setTenders] = useState([]);
+function Tender({user, bid, tenders}) {
+    const [tenderlist, setTenders] = useState(tenders.sort((a, b) => b.price - a.price));
     
-    useEffect(loadTenders(),[]);
+    function handleOnAdd(addTender) {
+        const newArr = [...tenderlist,addTender];
+        newArr.sort((a, b) => b.price - a.price);
+        setTenders(newArr);
+    }
     
-    function loadTenders(){
-        fetch(`/bids/${bid_id}/tenders`)
-        .then((r) => r.json())
-        .then((data) => {
-            console.log(data);
-            setTenders(data);
-        })
-        .catch((err) => console.log(err.errors));
+    const [userList, setUserList] = useState([]);
+    
+    useEffect(() => {
+        // load users
+        fetch(`/users`).then((r) => {
+            if (r.ok) {
+                r.json().then((data) => {
+                    setUserList(data);
+                });
+            }
+        }); 
+    }, []);
+
+    function user_name(tender){
+        return (userList.length > 0) ? userList.find(x => x.id === tender.user_id).user_name : "";
     }
 
-    function handleOnAdd() {
-        loadTenders();
-    }
-    
     return (
         <>
             <>
-                <NewTender bid_id={bid_id} onAdd={handleOnAdd} >
-                </NewTender>
+            {(bid.end_session || bid.user.id === user.id) ? (
+                <>
+                </>
+            ) : (
+                <NewTender bid_id={bid.id} onAdd={handleOnAdd} />
+            )}
             </>
             {tenderlist.length > 0 ? (
                 tenderlist.map((tender) => (
@@ -32,7 +43,7 @@ function Tender({bid_id}) {
                 <p>
                 <h3>Price: {tender.price}</h3>
                 &nbsp;·&nbsp;
-                <cite>By {tender.user.user_name}</cite>
+                <cite>By {user_name(tender)}</cite>
                 </p>
                 <ReactMarkdown>{tender.description}</ReactMarkdown> 
                 </>

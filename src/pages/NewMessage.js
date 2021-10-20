@@ -17,12 +17,12 @@ function NewMessage({ user, sub, receiver, goBack }) {
   },[])
 
   function receiveUser(){
-    return users.select(function(x) { if (x.user_name == to)  return true})
+    return users.find(x => x.user_name === to)
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const receiveID = receiveUser().id;
+    const receiveID = (receiveUser()) ? receiveUser().id : 0 ;
     setIsLoading(true);
     fetch("/messages", {
       method: "POST",
@@ -38,7 +38,6 @@ function NewMessage({ user, sub, receiver, goBack }) {
     }).then((r) => {
       setIsLoading(false);
       if (r.ok) {
-        r.json().then((data) => console.log(data));
         goBack();
       } else {
         r.json().then((err) => setErrors(err.errors));
@@ -53,7 +52,7 @@ function NewMessage({ user, sub, receiver, goBack }) {
   return (
       <WrapperChild>
         <h2>Create Bid</h2>
-        <form onSubmit={handleSubmit}>
+        <form>
           <FormField>
             <Label htmlFor="subject">Subject</Label>
             <Input
@@ -82,9 +81,10 @@ function NewMessage({ user, sub, receiver, goBack }) {
             />
           </FormField>
           <FormField>
-            <Button color="primary" type="submit">
+            <Button color="primary" onClick={handleSubmit}>
               {isLoading ? "Loading..." : "Submit Message"}
             </Button>
+            &nbsp;&nbsp;
             <Button variant="outline" onClick={handleGoBack}>
               Cancel
             </Button>            

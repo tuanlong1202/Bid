@@ -27,11 +27,9 @@ function BidList({user}) {
   }
   function onHandleUpdateBid(updatedBid) {
     setUpdatingBid(null);
-    setBids((bids) =>
-      bids.map((bid) => {
-        return bid.id === updatedBid.id ? updatedBid : bid;
-      })
-    );
+    fetch("/bids")
+      .then((r) => r.json())
+      .then(setBids);
   }
   function handleJoinBid(bidID) {
     fetch(`/bids/${bidID}`)
@@ -47,9 +45,8 @@ function BidList({user}) {
     <Wrapper>
       {bids.length > 0 ? (
         bids.map((bid) => (
-          <BidItem
+          <BidItem key={bid.id}
             user={user}
-            key={bid.id}
             bid={bid}
             onUpdateBid={handleUpdatingBid}
             onDeleteBid={handleDeleteBid}
